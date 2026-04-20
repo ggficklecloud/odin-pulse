@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { notFound } from "next/navigation";
 
+import { AuthStatus } from "@/components/auth-status";
 import { fetchNewsDetail } from "@/lib/api";
 
 type PageProps = {
@@ -73,6 +74,7 @@ export default async function NewsDetailPage({ params }: PageProps) {
             <Clock3 className="h-4 w-4 text-secondary" />
             最近同步 {refreshedAt ? formatDateTime(refreshedAt) : "暂无"}
           </span>
+          <AuthStatus />
         </div>
 
         <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1.06fr)_360px]">

@@ -1,4 +1,6 @@
 import type {
+  AuthCurrentUser,
+  UserInfo,
   NewsDetailResponse,
   NewsListResponse,
   NewsQuery,
@@ -41,4 +43,12 @@ export async function fetchNewsStats(): Promise<NewsStatsResponse> {
 
 export async function fetchNewsDetail(id: string): Promise<NewsDetailResponse> {
   return fetchJson<NewsDetailResponse>(`/api/v1/news/${id}`);
+}
+
+export async function fetchCurrentUser(): Promise<AuthCurrentUser | null> {
+  return fetchJson<AuthCurrentUser>("/api/v1/auth/me");
+}
+
+export async function fetchUserInfo(): Promise<UserInfo> {
+  return fetchJson<UserInfo>("/api/v1/user/get-user-info");
 }

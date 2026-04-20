@@ -5,7 +5,7 @@
 当前实现包含：
 
 - `apps/web`: Next.js 16 + TypeScript 前端，首页预留后续业务入口，`/news` 提供新闻检索与浏览。
-- `apps/api`: Fastify + TypeScript 后端，复刻 `FinanceNewsService#scheduledFetch` 的核心行为，每 2 分钟抓取多源新闻并写入 Elasticsearch。
+- `apps/api`: Fastify + TypeScript 后端，复刻 `FinanceNewsService#scheduledFetch` 的核心行为，每 2 分钟抓取多源新闻并写入 Elasticsearch；同时已接入 PostgreSQL + Redis 的认证会话基础设施。
 - `deploy`: systemd、nginx 和 GitHub Actions 发布所需模板。
 - `packages/shared`: 前后端共享的新闻类型与模块常量。
 - `design-system/odin-pulse`: 通过 `ui-ux-pro-max` 生成并持久化的设计系统文档。
@@ -16,11 +16,13 @@
 - Index: `finance_news`
 - PostgreSQL / TimescaleDB: `127.0.0.1:5432`
 - PostgreSQL Database: `quant_db`
+- Redis: `127.0.0.1:6379`
 
 说明：
 
 - 当前新闻模块已经调整为 ES-only，不再写 MySQL。
 - 后续如果有关系型数据需求，统一走 PostgreSQL / TimescaleDB，不再继续扩展 MySQL。
+- 认证相关数据已经规划/迁移到 PostgreSQL，session 使用 Redis 管理。
 
 ## 已接入的新闻源
 
@@ -115,6 +117,7 @@ sudo ./scripts/install_server.sh /opt/odin-pulse
 
 - `api.env` 放 ES 等敏感连接信息
 - `api.env` 也预留了 PostgreSQL 连接参数，供后续用户数据、收藏、配置等关系型业务使用
+- `api.env` 同时承载 Redis session、SMTP、管理员邮箱白名单等认证运行时配置
 - `web.env` 生产环境建议写：
 
 ```bash
@@ -148,6 +151,17 @@ pnpm --filter @odin-pulse/web dev
 - `GET /api/v1/news/stats`
 - `POST /api/v1/news/refresh`
 - `POST /api/v1/news/sync`
+- `POST /api/v1/auth/email-verify/send`
+- `POST /api/v1/auth/email-verify/login`
+- `POST /api/v1/auth/email-verify/login-by-password`
+- `GET /api/v1/auth/github-oauth-url`
+- `GET /api/v1/auth/google-oauth-url`
+- `POST /api/v1/auth/github-callback`
+- `POST /api/v1/auth/google-callback`
+- `GET /api/v1/auth/me`
+- `POST /api/v1/auth/logout`
+- `GET /api/v1/user/get-user-info`
+- `POST /api/v1/user/update-user-info`
 
 兼容保留了老风格入口：
 
@@ -163,6 +177,31 @@ pnpm --filter @odin-pulse/web dev
 - [apps/web/.env.example](/root/code/apps/web/.env.example)
 
 当前已经预留 PostgreSQL 连接配置，但新闻模块本身仍然只写 ES。
+
+## Auth Migration
+
+认证迁移目标：
+
+- 用户表：`odin_union_user`
+- 平台用户表：`odin_open_user`
+- OAuth 设置：`platform_oauth_setting`
+- 邮箱验证码：`odin_email_verify`
+- 平台表：`odin_platform`
+
+PostgreSQL 建表脚本：
+
+- [001_auth.sql](/root/code/db/postgres/001_auth.sql)
+
+本地迁移脚本：
+
+- [migrate_auth_mysql_to_pg.sh](/root/code/scripts/migrate_auth_mysql_to_pg.sh)
+
+说明：
+
+- GitHub / Google 的 `client_id`、`client_secret` 不写入代码仓库
+- 它们作为数据库数据或运行时环境存在
+- 迁移脚本会把 OAuth 回调地址更新为 `https://codego.eu.org/oauth/github-callback` 和 `https://codego.eu.org/oauth/google-callback`
+- 第三方平台控制台也必须同步允许这两个新回调地址，否则登录不会成功
 
 ## 设计系统
 

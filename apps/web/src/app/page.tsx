@@ -16,6 +16,7 @@ import {
 
 import { FUTURE_MODULES } from "@odin-pulse/shared";
 
+import { AuthStatus } from "@/components/auth-status";
 import { fetchNews, fetchNewsStats } from "@/lib/api";
 
 export const dynamic = "force-dynamic";
@@ -70,6 +71,7 @@ export default async function HomePage() {
                   <Activity className="h-4 w-4 text-emerald-600" />
                   最近同步 {stats.latestPublishTime ? formatTime(stats.latestPublishTime) : "暂无"}
                 </div>
+                <AuthStatus />
               </div>
             </div>
           </header>

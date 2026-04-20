@@ -13,6 +13,7 @@ import {
   SlidersHorizontal,
 } from "lucide-react";
 
+import { AuthStatus } from "@/components/auth-status";
 import { fetchNews } from "@/lib/api";
 import { RefreshButton } from "@/components/refresh-button";
 
@@ -90,6 +91,7 @@ export default async function NewsPage({
           </div>
 
           <div className="flex flex-wrap gap-3">
+            <AuthStatus />
             <RefreshButton />
             <Link
               href="/"
