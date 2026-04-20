@@ -1,8 +1,9 @@
 "use client";
 
 import { FormEvent, useMemo, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Github, LoaderCircle, Mail, ShieldCheck } from "lucide-react";
+import { Github, LoaderCircle, Mail, ShieldCheck, UserRound } from "lucide-react";
 
 type LoginMode = "password" | "code";
 
@@ -251,6 +252,13 @@ export function LoginPanel() {
         <p className="mt-5 text-sm leading-7 text-slate-600">
           GitHub / Google 的 client id 和 secret 不在公开仓库里，运行时配置来自数据库和服务器环境。
         </p>
+        <Link
+          href="/account"
+          className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-secondary hover:text-primary"
+        >
+          <UserRound className="h-4 w-4" />
+          已登录？进入账户中心
+        </Link>
       </aside>
     </div>
   );

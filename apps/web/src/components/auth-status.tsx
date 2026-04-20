@@ -76,11 +76,14 @@ export function AuthStatus() {
 
   return (
     <div className="flex flex-wrap items-center gap-3">
-      <div className="kicker-chip">
+      <Link
+        href="/account"
+        className="kicker-chip hover:-translate-y-0.5 hover:border-secondary hover:text-secondary"
+      >
         <UserRound className="h-4 w-4 text-secondary" />
         {user.openUserNickname || user.openUsername}
         {user.isAdmin ? <ShieldCheck className="h-4 w-4 text-emerald-600" /> : null}
-      </div>
+      </Link>
       <button
         type="button"
         onClick={handleLogout}

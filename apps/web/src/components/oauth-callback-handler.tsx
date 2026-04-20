@@ -39,7 +39,7 @@ export function OAuthCallbackHandler({
       .catch((error) => {
         setMessage(error instanceof Error ? error.message : "登录失败");
       });
-  }, [provider, router, searchParams]);
+  }, [code, provider, router]);
 
   return (
     <main className="shell px-4 py-16 md:px-6">
