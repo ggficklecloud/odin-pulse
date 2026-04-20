@@ -1,0 +1,16 @@
+[Unit]
+Description=Odin Pulse API
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/odin-pulse
+EnvironmentFile=/etc/odin-pulse/api.env
+Environment=PATH=/usr/local/bin:/usr/bin:/bin
+ExecStart=/usr/bin/pnpm --filter @odin-pulse/api start
+Restart=always
+RestartSec=5
+User=root
+
+[Install]
+WantedBy=multi-user.target

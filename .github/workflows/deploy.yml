@@ -1,0 +1,27 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on:
+      - self-hosted
+      - Linux
+      - ARM64
+      - odin-pulse
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy on self-hosted runner
+        shell: bash
+        env:
+          DEPLOY_PATH: ${{ vars.DEPLOY_PATH || '/opt/odin-pulse' }}
+          REPO_URL: https://github.com/${{ github.repository }}.git
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          export DEPLOY_PATH REPO_URL BRANCH
+          bash ./scripts/deploy_remote.sh
