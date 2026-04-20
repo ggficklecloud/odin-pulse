@@ -13,12 +13,9 @@ export function RefreshButton() {
     setStatus("idle");
 
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/news/refresh`,
-        {
-          method: "POST",
-        },
-      );
+      const response = await fetch("/api/v1/news/refresh", {
+        method: "POST",
+      });
 
       if (!response.ok) {
         throw new Error(`refresh failed: ${response.status}`);

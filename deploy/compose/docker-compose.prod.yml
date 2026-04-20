@@ -1,0 +1,68 @@
+services:
+  api:
+    build:
+      context: ../..
+      dockerfile: apps/api/Dockerfile
+    image: odin-pulse-api:${ODIN_PULSE_IMAGE_TAG:-local}
+    restart: unless-stopped
+    env_file:
+      - ${ODIN_PULSE_API_ENV_FILE:-/etc/odin-pulse/api.env}
+    environment:
+      NODE_ENV: production
+      API_HOST: 0.0.0.0
+      API_PORT: 3101
+    ports:
+      - "127.0.0.1:${ODIN_PULSE_API_PORT:-3101}:3101"
+    networks:
+      - default
+      - hfcloud
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3101/health').then((response)=>{if(!response.ok)process.exit(1)}).catch(()=>process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  web:
+    build:
+      context: ../..
+      dockerfile: apps/web/Dockerfile
+    image: odin-pulse-web:${ODIN_PULSE_IMAGE_TAG:-local}
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    env_file:
+      - ${ODIN_PULSE_WEB_ENV_FILE:-/etc/odin-pulse/web.env}
+    environment:
+      NODE_ENV: production
+      HOSTNAME: 0.0.0.0
+      PORT: 3100
+    ports:
+      - "127.0.0.1:${ODIN_PULSE_WEB_PORT:-3100}:3100"
+    networks:
+      - default
+      - hfcloud
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3100').then((response)=>{if(!response.ok)process.exit(1)}).catch(()=>process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+networks:
+  hfcloud:
+    external: true
+    name: ${ODIN_PULSE_DOCKER_NETWORK:-hfcloud_net}

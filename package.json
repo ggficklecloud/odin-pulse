@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "pnpm --filter @odin-pulse/shared build && concurrently -k -n web,api -c blue,green \"pnpm --filter @odin-pulse/web dev\" \"pnpm --filter @odin-pulse/api dev\"",
     "build": "pnpm -r build",
-    "lint": "pnpm -r lint",
+    "lint": "pnpm --filter @odin-pulse/shared build && pnpm -r lint",
     "typecheck": "pnpm --filter @odin-pulse/shared build && pnpm --filter @odin-pulse/shared typecheck && pnpm --filter @odin-pulse/api typecheck && pnpm --filter @odin-pulse/web typecheck",
     "format": "prettier --write ."
   },

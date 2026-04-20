@@ -6,7 +6,7 @@
 
 - `apps/web`: Next.js 16 + TypeScript 前端，首页预留后续业务入口，`/news` 提供新闻检索与浏览。
 - `apps/api`: Fastify + TypeScript 后端，复刻 `FinanceNewsService#scheduledFetch` 的核心行为，每 2 分钟抓取多源新闻并写入 Elasticsearch；同时已接入 PostgreSQL + Redis 的认证会话基础设施。
-- `deploy`: systemd、nginx 和 GitHub Actions 发布所需模板。
+- `deploy`: Docker Compose、nginx 和 GitHub Actions 发布所需模板。
 - `packages/shared`: 前后端共享的新闻类型与模块常量。
 - `design-system/odin-pulse`: 通过 `ui-ux-pro-max` 生成并持久化的设计系统文档。
 
@@ -73,31 +73,39 @@ pnpm dev
 
 仓库里已经包含以下发布资源：
 
-- [deploy/nginx/codego.eu.org.conf](/root/code/deploy/nginx/codego.eu.org.conf)
-- [deploy/systemd/odin-pulse-api.service](/root/code/deploy/systemd/odin-pulse-api.service)
-- [deploy/systemd/odin-pulse-web.service](/root/code/deploy/systemd/odin-pulse-web.service)
-- [scripts/install_server.sh](/root/code/scripts/install_server.sh)
-- [scripts/deploy_remote.sh](/root/code/scripts/deploy_remote.sh)
-- [deploy.yml](/root/code/.github/workflows/deploy.yml)
-- [ci.yml](/root/code/.github/workflows/ci.yml)
+- `apps/api/Dockerfile`
+- `apps/web/Dockerfile`
+- `deploy/compose/docker-compose.prod.yml`
+- `deploy/nginx/codego.eu.org.conf`
+- `scripts/install_server.sh`
+- `scripts/deploy_remote.sh`
+- `.github/workflows/deploy.yml`
+- `.github/workflows/ci.yml`
+- `deploy/README.md`
 
 发布策略：
 
 - GitHub 仓库公开
-- 敏感配置只放服务器 `/etc/odin-pulse/*.env`
+- 敏感配置由 GitHub Secrets 写入服务器 `/etc/odin-pulse/*.env`
 - Deploy workflow 跑在当前服务器上的 self-hosted runner
-- 推送到 `main` 后，Actions 在本机执行拉取、构建、重启服务
+- 推送到 `main` 后，Actions 在本机执行拉取、构建、更新容器
 - 如果服务器上存在历史遗留的 `codego.eu.org` Nginx 站点，安装/发布脚本会自动把该冲突入口挪开，避免抢占新站点的 443 server_name
 
 ## GitHub Variables
 
-需要配置的 GitHub Variables：
+必需 GitHub Secrets：
 
-- `DEPLOY_PATH`
+- `PROD_API_ENV`
+- `PROD_WEB_ENV`
 
-默认建议：
+GitHub Variables 默认都可省略，推荐配置：
 
 - `DEPLOY_PATH=/opt/odin-pulse`
+- `ODIN_PULSE_RUNTIME_ENV_DIR=/etc/odin-pulse`
+
+更多部署细节、完整 secrets / variables 清单、推荐 env 内容和 rollout 注意事项见：
+
+- `deploy/README.md`
 
 ## 服务器初始化
 
@@ -110,20 +118,14 @@ sudo ./scripts/install_server.sh /opt/odin-pulse
 
 然后编辑：
 
-- `/etc/odin-pulse/api.env`
-- `/etc/odin-pulse/web.env`
+- GitHub secret `PROD_API_ENV`
+- GitHub secret `PROD_WEB_ENV`
 
 其中：
 
-- `api.env` 放 ES 等敏感连接信息
-- `api.env` 也预留了 PostgreSQL 连接参数，供后续用户数据、收藏、配置等关系型业务使用
-- `api.env` 同时承载 Redis session、SMTP、管理员邮箱白名单等认证运行时配置
-- `web.env` 生产环境建议写：
-
-```bash
-API_BASE_URL=http://127.0.0.1:3101
-NEXT_PUBLIC_API_BASE_URL=/api
-```
+- `PROD_API_ENV` 放 ES、PostgreSQL、Redis、SMTP、管理员邮箱白名单等运行时配置
+- `PROD_WEB_ENV` 只需要提供服务端到 API 的内部地址，推荐 `API_BASE_URL=http://api:3101`
+- PostgreSQL / Redis / Elasticsearch 在容器化生产环境里应使用 `hfcloud_net` 上的容器 DNS 名称，不要继续写 `127.0.0.1`
 
 ## Self-hosted Runner
 
@@ -173,10 +175,12 @@ pnpm --filter @odin-pulse/web dev
 
 示例文件：
 
-- [apps/api/.env.example](/root/code/apps/api/.env.example)
-- [apps/web/.env.example](/root/code/apps/web/.env.example)
+- `apps/api/.env.example`
+- `apps/web/.env.example`
+- `deploy/env/api.env.example`
+- `deploy/env/web.env.example`
 
-当前已经预留 PostgreSQL 连接配置，但新闻模块本身仍然只写 ES。
+所有示例文件都只保留占位符，不写入真实 secret、密码、token 或带凭证的 URL。
 
 ## Auth Migration
 

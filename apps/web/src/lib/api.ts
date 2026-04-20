@@ -9,9 +9,12 @@ import type {
 
 function getApiBaseUrl() {
   if (typeof window === "undefined") {
-    return process.env.API_BASE_URL ?? process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:3001";
+    return (
+      process.env.API_BASE_URL ??
+      (process.env.NODE_ENV === "production" ? "http://api:3101" : "http://127.0.0.1:3001")
+    );
   }
-  return process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:3001";
+  return "";
 }
 
 async function fetchJson<T>(path: string): Promise<T> {

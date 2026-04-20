@@ -1,7 +1,7 @@
 import { load } from "cheerio";
 
-import type { DraftNewsRecord } from "./news.types";
-import { browserHeaders, cleanText, parseRelativeTime } from "./news.utils";
+import type { DraftNewsRecord } from "./news.types.js";
+import { browserHeaders, cleanText, parseRelativeTime } from "./news.utils.js";
 
 async function safeJson<T>(response: Response): Promise<T> {
   return (await response.json()) as T;

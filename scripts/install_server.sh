@@ -2,25 +2,13 @@
 set -euo pipefail
 
 APP_DIR="${1:-/opt/odin-pulse}"
-SYSTEMD_DIR="/etc/systemd/system"
-ENV_DIR="/etc/odin-pulse"
+ENV_DIR="${ODIN_PULSE_RUNTIME_ENV_DIR:-/etc/odin-pulse}"
+ODIN_PULSE_DOCKER_NETWORK="${ODIN_PULSE_DOCKER_NETWORK:-hfcloud_net}"
 NGINX_AVAILABLE="/etc/nginx/sites-available/codego.eu.org.conf"
 NGINX_ENABLED="/etc/nginx/sites-enabled/codego.eu.org.conf"
 
 mkdir -p "${APP_DIR}" "${ENV_DIR}"
-
-if [[ ! -f "${ENV_DIR}/api.env" ]]; then
-  cp deploy/env/api.env.example "${ENV_DIR}/api.env"
-  echo "Created ${ENV_DIR}/api.env. Fill real secrets before starting services."
-fi
-
-if [[ ! -f "${ENV_DIR}/web.env" ]]; then
-  cp deploy/env/web.env.example "${ENV_DIR}/web.env"
-  echo "Created ${ENV_DIR}/web.env."
-fi
-
-sed "s|/opt/odin-pulse|${APP_DIR}|g" deploy/systemd/odin-pulse-api.service > "${SYSTEMD_DIR}/odin-pulse-api.service"
-sed "s|/opt/odin-pulse|${APP_DIR}|g" deploy/systemd/odin-pulse-web.service > "${SYSTEMD_DIR}/odin-pulse-web.service"
+chmod 700 "${ENV_DIR}"
 
 cp deploy/nginx/codego.eu.org.conf "${NGINX_AVAILABLE}"
 ln -sf "${NGINX_AVAILABLE}" "${NGINX_ENABLED}"
@@ -29,13 +17,16 @@ if [[ -f /etc/nginx/conf.d/biz.conf ]]; then
   perl -0pi -e 's/server_name codego\.eu\.org;/server_name codego-shortlink.internal;/g' /etc/nginx/conf.d/biz.conf
 fi
 
-systemctl daemon-reload
+if ! docker network inspect "${ODIN_PULSE_DOCKER_NETWORK}" >/dev/null 2>&1; then
+  docker network create "${ODIN_PULSE_DOCKER_NETWORK}" >/dev/null
+fi
+
 nginx -t
-systemctl enable odin-pulse-api odin-pulse-web
 
 echo "Server templates installed."
 echo "Next steps:"
-echo "1. Fill ${ENV_DIR}/api.env and ${ENV_DIR}/web.env"
-echo "2. Ensure codego.eu.org points to this host"
-echo "3. systemctl start odin-pulse-api odin-pulse-web"
-echo "4. systemctl reload nginx"
+echo "1. Configure GitHub secret PROD_API_ENV from deploy/env/api.env.example"
+echo "2. Configure GitHub secret PROD_WEB_ENV from deploy/env/web.env.example"
+echo "3. Set GitHub vars DEPLOY_PATH=${APP_DIR} and ODIN_PULSE_RUNTIME_ENV_DIR=${ENV_DIR}"
+echo "4. Ensure Docker, Docker Compose, and the self-hosted runner can manage ${ODIN_PULSE_DOCKER_NETWORK}"
+echo "5. Run the Deploy workflow"

@@ -16,12 +16,45 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Write runtime env files
+        shell: bash
+        env:
+          ODIN_PULSE_RUNTIME_ENV_DIR: ${{ vars.ODIN_PULSE_RUNTIME_ENV_DIR || '/etc/odin-pulse' }}
+          PROD_API_ENV: ${{ secrets.PROD_API_ENV }}
+          PROD_WEB_ENV: ${{ secrets.PROD_WEB_ENV }}
+        run: |
+          set -euo pipefail
+
+          if [[ -z "${PROD_API_ENV}" ]]; then
+            echo "::error::Missing GitHub secret PROD_API_ENV"
+            exit 1
+          fi
+
+          if [[ -z "${PROD_WEB_ENV}" ]]; then
+            echo "::error::Missing GitHub secret PROD_WEB_ENV"
+            exit 1
+          fi
+
+          mkdir -p "${ODIN_PULSE_RUNTIME_ENV_DIR}"
+          chmod 700 "${ODIN_PULSE_RUNTIME_ENV_DIR}"
+          umask 077
+          printf '%s\n' "${PROD_API_ENV}" > "${ODIN_PULSE_RUNTIME_ENV_DIR}/api.env"
+          printf '%s\n' "${PROD_WEB_ENV}" > "${ODIN_PULSE_RUNTIME_ENV_DIR}/web.env"
+
       - name: Deploy on self-hosted runner
         shell: bash
         env:
           DEPLOY_PATH: ${{ vars.DEPLOY_PATH || '/opt/odin-pulse' }}
+          ODIN_PULSE_RUNTIME_ENV_DIR: ${{ vars.ODIN_PULSE_RUNTIME_ENV_DIR || '/etc/odin-pulse' }}
+          ODIN_PULSE_DOCKER_NETWORK: ${{ vars.ODIN_PULSE_DOCKER_NETWORK || 'hfcloud_net' }}
+          ODIN_PULSE_COMPOSE_PROJECT: ${{ vars.ODIN_PULSE_COMPOSE_PROJECT || 'odin-pulse' }}
+          ODIN_PULSE_API_PORT: ${{ vars.ODIN_PULSE_API_PORT || '3101' }}
+          ODIN_PULSE_WEB_PORT: ${{ vars.ODIN_PULSE_WEB_PORT || '3100' }}
+          ODIN_PULSE_IMAGE_TAG: ${{ github.sha }}
           REPO_URL: https://github.com/${{ github.repository }}.git
           BRANCH: ${{ github.ref_name }}
         run: |
           export DEPLOY_PATH REPO_URL BRANCH
+          export ODIN_PULSE_RUNTIME_ENV_DIR ODIN_PULSE_DOCKER_NETWORK ODIN_PULSE_COMPOSE_PROJECT
+          export ODIN_PULSE_API_PORT ODIN_PULSE_WEB_PORT ODIN_PULSE_IMAGE_TAG
           bash ./scripts/deploy_remote.sh
