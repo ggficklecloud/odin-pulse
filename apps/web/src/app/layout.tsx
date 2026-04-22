@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
-import { Open_Sans, Poppins } from "next/font/google";
+import { Open_Sans, Poppins, Geist } from "next/font/google";
 import "./globals.css";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const headingFont = Poppins({
   variable: "--font-heading",
@@ -27,7 +30,7 @@ export default function RootLayout({
   return (
     <html
       lang="zh-CN"
-      className={`${headingFont.variable} ${bodyFont.variable} h-full antialiased`}
+      className={cn("h-full", "antialiased", headingFont.variable, bodyFont.variable, "font-sans", geist.variable)}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
