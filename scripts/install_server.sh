@@ -14,7 +14,7 @@ cp deploy/nginx/codego.eu.org.conf "${NGINX_AVAILABLE}"
 ln -sf "${NGINX_AVAILABLE}" "${NGINX_ENABLED}"
 
 if [[ -f /etc/nginx/conf.d/biz.conf ]]; then
-  perl -0pi -e 's/server_name codego\.eu\.org;/server_name codego-shortlink.internal;/g' /etc/nginx/conf.d/biz.conf
+  perl -0pi -e 's/server_name\s+codego-shortlink\.internal;/server_name s.codego.eu.org codego-shortlink.internal;/g' /etc/nginx/conf.d/biz.conf
 fi
 
 if ! docker network inspect "${ODIN_PULSE_DOCKER_NETWORK}" >/dev/null 2>&1; then
