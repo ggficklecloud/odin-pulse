@@ -282,7 +282,7 @@ export default async function HomePage() {
           <div className="relative lg:pl-12">
             <div className="panel-strong relative z-10 rounded-[2.5rem] p-4 shadow-2xl">
               <div className="overflow-hidden rounded-2xl bg-slate-950 p-6 text-sm font-mono text-emerald-400">
-                <div className="mb-2 text-slate-500">// Odin Pulse Sync Log</div>
+                <div className="mb-2 text-slate-500">{"// Odin Pulse Sync Log"}</div>
                 <div className="flex gap-4">
                   <span className="text-slate-600">[10:24:01]</span>
                   <span>Fetching wallstreet-cn...</span>

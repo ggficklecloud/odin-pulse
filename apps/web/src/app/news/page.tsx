@@ -4,25 +4,21 @@ import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  ArrowLeft,
   ArrowRight,
   ArrowUpRight,
   CalendarClock,
-  ChevronDown,
   ChevronLeft,
   ChevronRight,
   DatabaseZap,
-  Filter,
   Newspaper,
   Radar,
   Search,
-  SlidersHorizontal,
   X,
 } from "lucide-react";
 
 import { AuthStatus } from "@/components/auth-status";
 import { RefreshButton } from "@/components/refresh-button";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -34,7 +30,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { fetchNews } from "@/lib/api";
-import { useEffect, useState, ReactNode } from "react";
+import { Suspense, useEffect, useState, ReactNode } from "react";
 import { NewsListResponse } from "@odin-pulse/shared";
 
 const quickFilters = [
@@ -45,6 +41,20 @@ const quickFilters = [
 ] as const;
 
 export default function NewsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex h-screen items-center justify-center bg-background">
+          <Radar className="h-12 w-12 animate-pulse text-primary" />
+        </div>
+      }
+    >
+      <NewsPageContent />
+    </Suspense>
+  );
+}
+
+function NewsPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [data, setData] = useState<NewsListResponse | null>(null);
@@ -200,7 +210,7 @@ export default function NewsPage() {
 
             <div className="space-y-2">
               <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-4">分类筛选</label>
-              <Select value={category || "none"} onValueChange={(v) => handleFilter("category", v)}>
+              <Select value={category || "none"} onValueChange={(v) => handleFilter("category", v ?? "none")}>
                 <SelectTrigger className="h-12 rounded-2xl border-slate-200 bg-slate-50/50 focus:bg-white transition-all shadow-none">
                   <SelectValue placeholder="全部类别" />
                 </SelectTrigger>
@@ -215,7 +225,7 @@ export default function NewsPage() {
 
             <div className="space-y-2">
               <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-4">数据来源</label>
-              <Select value={source || "none"} onValueChange={(v) => handleFilter("source", v)}>
+              <Select value={source || "none"} onValueChange={(v) => handleFilter("source", v ?? "none")}>
                 <SelectTrigger className="h-12 rounded-2xl border-slate-200 bg-slate-50/50 focus:bg-white transition-all shadow-none">
                   <SelectValue placeholder="全部来源" />
                 </SelectTrigger>
@@ -296,16 +306,25 @@ export default function NewsPage() {
 
                       <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
                         <div className="flex items-center gap-3">
-                          <Button asChild size="sm" className="rounded-full font-bold shadow-md transition-all hover:bg-slate-800">
-                            <Link href={`/news/${item.id}`}>
-                              详情分析 <ArrowRight className="h-3.5 w-3.5 ml-1" />
-                            </Link>
-                          </Button>
-                          <Button asChild variant="outline" size="sm" className="rounded-full font-bold">
-                            <Link href={`/news?keyword=${encodeURIComponent(item.title.slice(0, 20))}`}>
-                              全网关联
-                            </Link>
-                          </Button>
+                          <Link
+                            href={`/news/${item.id}`}
+                            className={buttonVariants({
+                              size: "sm",
+                              className: "rounded-full font-bold shadow-md transition-all hover:bg-slate-800",
+                            })}
+                          >
+                            详情分析 <ArrowRight className="h-3.5 w-3.5 ml-1" />
+                          </Link>
+                          <Link
+                            href={`/news?keyword=${encodeURIComponent(item.title.slice(0, 20))}`}
+                            className={buttonVariants({
+                              variant: "outline",
+                              size: "sm",
+                              className: "rounded-full font-bold",
+                            })}
+                          >
+                            全网关联
+                          </Link>
                         </div>
 
                         {item.sourceUrl && (
