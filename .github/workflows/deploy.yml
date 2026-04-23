@@ -31,7 +31,7 @@ jobs:
         env:
           ODIN_PULSE_RUNTIME_ENV_DIR: ${{ vars.ODIN_PULSE_RUNTIME_ENV_DIR || '/etc/odin-pulse' }}
           PROD_API_ENV: ${{ secrets.PROD_API_ENV }}
-          PROD_WEB_ENV: ${{ secrets.PROD_WEB_ENV }}
+          PROD_WEB_ENV: ${{ vars.PROD_WEB_ENV }}
         run: |
           set -euo pipefail
 
