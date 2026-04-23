@@ -5,6 +5,9 @@ import type {
   NewsListResponse,
   NewsQuery,
   NewsStatsResponse,
+  ShortLink,
+  ShortLinkListResponse,
+  CreateShortLinkRequest,
 } from "@odin-pulse/shared";
 
 function getApiBaseUrl() {
@@ -20,6 +23,9 @@ function getApiBaseUrl() {
 async function fetchJson<T>(path: string): Promise<T> {
   const response = await fetch(`${getApiBaseUrl()}${path}`, {
     cache: "no-store",
+    headers: {
+      "Content-Type": "application/json",
+    },
   });
 
   if (!response.ok) {
@@ -54,4 +60,34 @@ export async function fetchCurrentUser(): Promise<AuthCurrentUser | null> {
 
 export async function fetchUserInfo(): Promise<UserInfo> {
   return fetchJson<UserInfo>("/api/v1/user/get-user-info");
+}
+
+export async function fetchShortLinks(): Promise<ShortLinkListResponse> {
+  return fetchJson<ShortLinkListResponse>("/api/v1/short-links");
+}
+
+export async function createShortLink(data: CreateShortLinkRequest): Promise<ShortLink> {
+  const response = await fetch(`${getApiBaseUrl()}/api/v1/short-links`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Request failed: ${response.status}`);
+  }
+
+  return (await response.json()) as ShortLink;
+}
+
+export async function deleteShortLink(id: string): Promise<{ success: boolean }> {
+  const response = await fetch(`${getApiBaseUrl()}/api/v1/short-links/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!response.ok) {
+    throw new Error(`Request failed: ${response.status}`);
+  }
+
+  return (await response.json()) as { success: boolean };
 }

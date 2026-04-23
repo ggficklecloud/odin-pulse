@@ -11,6 +11,7 @@ const navLinks = [
   { name: "首页", href: "/" },
   { name: "新闻", href: "/news" },
   { name: "行情", href: "/markets" },
+  { name: "短链", href: "/short-links" },
   { name: "账户", href: "/account" },
 ];
 

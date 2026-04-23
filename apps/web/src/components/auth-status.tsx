@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { LoaderCircle, LogIn, LogOut, ShieldCheck, UserRound } from "lucide-react";
+import { LogIn, LogOut, ShieldCheck, UserRound } from "lucide-react";
 
 type UserInfo = {
   openId: string;
@@ -18,8 +17,6 @@ type UserInfo = {
 };
 
 export function AuthStatus() {
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
   const [user, setUser] = useState<UserInfo | null>(null);
 
   useEffect(() => {
@@ -88,11 +85,10 @@ export function AuthStatus() {
       <button
         type="button"
         onClick={handleLogout}
-        disabled={isPending}
         className="inline-flex items-center justify-center h-8 w-8 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/5 transition-colors border border-transparent hover:border-destructive/10"
         title="退出登录"
       >
-        {isPending ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <LogOut className="h-4 w-4" />}
+        <LogOut className="h-4 w-4" />
       </button>
     </div>
   );
