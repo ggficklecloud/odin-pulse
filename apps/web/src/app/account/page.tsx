@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowLeft, ShieldCheck, UserRound, Sparkles, Settings, Activity } from "lucide-react";
+import { ArrowLeft, ShieldCheck, UserRound, Settings, Activity } from "lucide-react";
 import { motion } from "framer-motion";
 
 import { AccountPanel } from "@/components/account-panel";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const fadeInUp = {

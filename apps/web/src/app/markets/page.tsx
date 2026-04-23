@@ -1,8 +1,6 @@
 "use client";
 
-import Link from "next/link";
 import { 
-  ArrowLeft, 
   TrendingUp, 
   TrendingDown, 
   Activity, 
@@ -89,8 +87,8 @@ export default function MarketsPage() {
               <span className="text-accent">Quant Analysis</span>
             </h2>
             <p className="mt-8 text-lg text-slate-300 font-medium leading-relaxed max-w-lg">
-              We're building a state-of-the-art terminal for multi-asset market intelligence. 
-              Soon, you'll be able to track global indices, crypto, and commodities with AI-driven sentiment overlays.
+              We&apos;re building a state-of-the-art terminal for multi-asset market intelligence. 
+              Soon, you&apos;ll be able to track global indices, crypto, and commodities with AI-driven sentiment overlays.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
                <Button className="rounded-full bg-white text-primary hover:bg-slate-100 h-12 px-8 font-black uppercase tracking-widest text-xs">
@@ -255,6 +253,9 @@ function StatusItem({ label, value, color }: { label: string, value: string, col
   );
 }
 
-function cn(...inputs: any[]) {
-  return inputs.filter(Boolean).join(' ');
+function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
 }
+
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";

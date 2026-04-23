@@ -5,7 +5,7 @@ import { ArrowLeft, Sparkles, ShieldCheck, Fingerprint } from "lucide-react";
 import { motion } from "framer-motion";
 
 import { LoginPanel } from "@/components/login-panel";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const fadeInUp = {

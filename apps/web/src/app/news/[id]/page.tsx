@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { notFound, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 import { AuthStatus } from "@/components/auth-status";
 import { fetchNewsDetail } from "@/lib/api";
@@ -69,7 +69,7 @@ export default function NewsDetailPage() {
     async function loadDetail() {
       try {
         const data = await fetchNewsDetail(id);
-        // @ts-ignore
+        // @ts-expect-error detail structure mismatch
         setDetail(data);
       } catch {
         // Error handling
@@ -195,10 +195,10 @@ export default function NewsDetailPage() {
                   同源追踪
                 </Link>
                 <div className="flex gap-2">
-                  <Button variant="outline" size="icon" className="rounded-full border-white/20 bg-white/5 text-white hover:bg-white/10 h-12 w-12">
+                  <Button variant="outline" size="icon" className="rounded-full border-white/20 bg-white/5 text-white hover:bg-white/10 h-12 w-12 shadow-none">
                     <Share2 className="h-5 w-5" />
                   </Button>
-                  <Button variant="outline" size="icon" className="rounded-full border-white/20 bg-white/5 text-white hover:bg-white/10 h-12 w-12">
+                  <Button variant="outline" size="icon" className="rounded-full border-white/20 bg-white/5 text-white hover:bg-white/10 h-12 w-12 shadow-none">
                     <Bookmark className="h-5 w-5" />
                   </Button>
                 </div>
@@ -208,7 +208,7 @@ export default function NewsDetailPage() {
 
           {/* Article Body */}
           <motion.section variants={fadeInUp}>
-            <Card className="panel-strong border-none rounded-[2.5rem] p-8 md:p-14 overflow-hidden">
+            <Card className="panel-strong border-none rounded-[2.5rem] p-8 md:p-14 overflow-hidden shadow-none">
               <div className="relative">
                 <div className="flex items-center justify-between mb-10">
                   <div className="flex items-center gap-4">
@@ -218,7 +218,7 @@ export default function NewsDetailPage() {
                     </h2>
                   </div>
                   <div className="hidden sm:block">
-                     <Badge variant="outline" className="border-slate-200 text-slate-400 font-bold px-4 py-1.5 rounded-full">
+                     <Badge variant="outline" className="border-slate-200 text-slate-400 font-bold px-4 py-1.5 rounded-full shadow-none">
                        Published: {formatDateTime(item.publishTime)}
                      </Badge>
                   </div>
@@ -237,18 +237,18 @@ export default function NewsDetailPage() {
                 <div className="mt-16 flex flex-col sm:flex-row items-center justify-between gap-6 pt-10 border-t border-slate-100">
                   <div className="flex items-center gap-3">
                      <span className="text-sm font-bold text-slate-400 uppercase tracking-widest">Metadata</span>
-                     <Badge variant="outline" className="rounded-full border-slate-200 text-slate-600 bg-slate-50 font-bold">
+                     <Badge variant="outline" className="rounded-full border-slate-200 text-slate-600 bg-slate-50 font-bold shadow-none">
                        {item.source}
                      </Badge>
                      {item.category && (
-                       <Badge variant="outline" className="rounded-full border-slate-200 text-slate-600 bg-slate-50 font-bold">
+                       <Badge variant="outline" className="rounded-full border-slate-200 text-slate-600 bg-slate-50 font-bold shadow-none">
                          {item.category}
                        </Badge>
                      )}
                   </div>
                   <Link 
                     href={keywordHref} 
-                    className="text-sm font-black text-secondary hover:text-primary transition-colors flex items-center gap-2 group"
+                    className="text-sm font-black text-secondary hover:text-primary transition-colors flex items-center gap-2 group no-underline"
                   >
                     继续回查这条主线
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -262,7 +262,7 @@ export default function NewsDetailPage() {
         {/* Sidebar / Contextual Data */}
         <aside className="lg:col-span-4 space-y-8">
           <motion.div variants={fadeInUp}>
-            <Card className="panel border-none rounded-[2.5rem] p-8 shadow-xl bg-white/70 backdrop-blur-xl border border-white/40">
+            <Card className="panel border-none rounded-[2.5rem] p-8 shadow-xl bg-white/70 backdrop-blur-xl border border-white/40 overflow-visible">
               <CardHeader className="p-0 mb-8">
                 <p className="eyebrow flex items-center gap-2">
                   <Radar className="h-3 w-3" />
@@ -301,7 +301,7 @@ export default function NewsDetailPage() {
           </motion.div>
 
           <motion.div variants={fadeInUp}>
-            <Card className="panel border-none rounded-[2.5rem] p-8 shadow-xl bg-white/70 backdrop-blur-xl">
+            <Card className="panel border-none rounded-[2.5rem] p-8 shadow-xl bg-white/70 backdrop-blur-xl overflow-visible">
               <CardHeader className="p-0 mb-6 flex flex-row items-center justify-between">
                 <div>
                   <p className="eyebrow">Related News</p>
@@ -316,7 +316,7 @@ export default function NewsDetailPage() {
                     <Link
                       key={relatedItem.id}
                       href={`/news/${relatedItem.id}`}
-                      className="group block min-w-[280px] sm:min-w-0 snap-start"
+                      className="group block min-w-[280px] sm:min-w-0 snap-start no-underline"
                     >
                       <div className="panel-muted rounded-3xl p-6 transition-all duration-300 group-hover:-translate-y-1.5 group-hover:bg-white group-hover:shadow-xl border border-transparent group-hover:border-slate-100 relative overflow-hidden">
                         <div className="flex items-center justify-between mb-3">
@@ -344,7 +344,7 @@ export default function NewsDetailPage() {
                 </div>
               </CardContent>
               <CardFooter className="p-0 mt-6 pt-6 border-t border-slate-100 flex justify-center">
-                <Link href="/news" className="text-sm font-black text-slate-400 hover:text-primary transition-colors uppercase tracking-widest">
+                <Link href="/news" className="text-sm font-black text-slate-400 hover:text-primary transition-colors uppercase tracking-widest no-underline">
                   View All News
                 </Link>
               </CardFooter>
@@ -380,7 +380,7 @@ function TrackCard({
       <p className="text-sm leading-relaxed text-slate-500 line-clamp-3 font-medium mb-5">{body}</p>
       <Link
         href={href}
-        className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-secondary transition-all hover:gap-3 group/link"
+        className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-secondary transition-all hover:gap-3 group/link no-underline"
       >
         {action}
         <ArrowRight className="h-3.5 w-3.5" />

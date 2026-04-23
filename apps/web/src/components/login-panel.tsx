@@ -291,7 +291,7 @@ export function LoginPanel() {
             </div>
             
             <p className="mt-4 text-[10px] leading-relaxed text-slate-400 text-center italic">
-              "工业级认证基建，授权受控于后端环境变量，确保数据主权。"
+              &quot;工业级认证基建，授权受控于后端环境变量，确保数据主权。&quot;
             </p>
             
             <Link 
