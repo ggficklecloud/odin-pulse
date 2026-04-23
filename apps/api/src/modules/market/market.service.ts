@@ -24,18 +24,17 @@ export class MarketService {
       throw new Error(`iTick API failed: ${response.statusText}`);
     }
 
-    const data = await response.json();
-    
-    // Mapping iTick response to our MarketQuote
-    // data.ld: latest, data.ch: change, data.chp: change percent, etc.
+    const json = await response.json();
+    const data = json.data;
+
     return {
       symbol: `${symbol}$${region}`,
-      price: data.ld || 0,
-      change: data.ch || 0,
-      changePercent: data.chp || 0,
-      high: data.h || 0,
-      low: data.l || 0,
-      volume: data.v || 0,
+      price: data?.ld || 0,
+      change: data?.ch || 0,
+      changePercent: data?.chp || 0,
+      high: data?.h || 0,
+      low: data?.l || 0,
+      volume: data?.v || 0,
       updatedAt: new Date().toISOString(),
     };
   }
