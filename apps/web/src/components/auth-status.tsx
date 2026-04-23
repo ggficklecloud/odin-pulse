@@ -75,23 +75,23 @@ export function AuthStatus() {
   }
 
   return (
-    <div className="flex flex-wrap items-center gap-3">
+    <div className="flex items-center gap-3">
       <Link
         href="/account"
-        className="kicker-chip hover:-translate-y-0.5 hover:border-secondary hover:text-secondary"
+        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-secondary text-secondary-foreground text-xs font-bold transition-all hover:bg-primary/5 hover:text-primary border border-transparent hover:border-primary/10"
       >
-        <UserRound className="h-4 w-4 text-secondary" />
-        {user.openUserNickname || user.openUsername}
-        {user.isAdmin ? <ShieldCheck className="h-4 w-4 text-emerald-600" /> : null}
+        <UserRound className="h-3.5 w-3.5 text-primary" />
+        <span className="max-w-[100px] truncate">{user.openUserNickname || user.openUsername}</span>
+        {user.isAdmin ? <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" /> : null}
       </Link>
       <button
         type="button"
         onClick={handleLogout}
         disabled={isPending}
-        className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:-translate-y-0.5 hover:border-secondary hover:text-secondary"
+        className="inline-flex items-center justify-center h-8 w-8 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/5 transition-colors border border-transparent hover:border-destructive/10"
+        title="退出登录"
       >
         {isPending ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <LogOut className="h-4 w-4" />}
-        退出
       </button>
     </div>
   );

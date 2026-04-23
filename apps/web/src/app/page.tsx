@@ -130,15 +130,15 @@ export default async function HomePage() {
             <motion.div 
               className="md:col-span-4 md:row-span-1"
               initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <Card className="bento-card h-full p-6 flex flex-col justify-between">
+              <Card className="bento-card bg-white h-full p-6 flex flex-col justify-between">
                 <div className="flex items-center justify-between">
                    <div className="p-2 rounded-lg bg-secondary text-primary">
                       <Activity className="h-5 w-5" />
                    </div>
-                   <Badge variant="outline" className="text-[10px] font-black border-emerald-500/20 text-emerald-600 bg-emerald-500/5 uppercase tracking-tighter">Live</Badge>
+                   <Badge variant="outline" className="text-[10px] font-black border-emerald-500/20 text-emerald-600 bg-emerald-500/5 uppercase tracking-tighter shadow-none">Live</Badge>
                 </div>
                 <div>
                    <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest mb-1">已索引资讯</p>
@@ -151,11 +151,11 @@ export default async function HomePage() {
             <motion.div 
               className="md:col-span-4 md:row-span-1"
               initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
             >
-              <Card className="bento-card h-full p-6 flex flex-col justify-between">
+              <Card className="bento-card bg-white h-full p-6 flex flex-col justify-between">
                 <div className="flex items-center justify-between">
                    <div className="p-2 rounded-lg bg-secondary text-accent">
                       <TrendingUp className="h-5 w-5" />
@@ -175,7 +175,7 @@ export default async function HomePage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <Card className="bento-card h-full flex items-center px-8 md:px-12">
+              <Card className="bento-card bg-white h-full flex items-center px-8 md:px-12">
                  <div className="flex items-center gap-8 w-full overflow-hidden">
                     <div className="hidden lg:flex items-center gap-3 shrink-0">
                        <div className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />

@@ -87,7 +87,7 @@
 
 /* Bento 网格卡片 */
 .bento-card {
-  @apply bg-white border border-border shadow-[0_1px_3px_rgba(0,0,0,0.05)] transition-all duration-300;
+  @apply border border-border shadow-[0_1px_3px_rgba(0,0,0,0.05)] transition-all duration-300;
 }
 
 .bento-card:hover {
