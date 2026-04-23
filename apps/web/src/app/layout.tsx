@@ -1,15 +1,10 @@
 import type { Metadata } from "next";
-import { Inter, Newsreader } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/navbar";
 
-const bodyFont = Inter({
-  variable: "--font-body",
-  subsets: ["latin"],
-});
-
-const headingFont = Newsreader({
-  variable: "--font-heading",
+const inter = Inter({
+  variable: "--font-sans",
   subsets: ["latin"],
 });
 
@@ -26,9 +21,9 @@ export default function RootLayout({
   return (
     <html
       lang="zh-CN"
-      className={`${headingFont.variable} ${bodyFont.variable} h-full antialiased`}
+      className={`${inter.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col pt-14">
+      <body className="min-h-full flex flex-col pt-14 font-sans">
         <Navbar />
         {children}
       </body>

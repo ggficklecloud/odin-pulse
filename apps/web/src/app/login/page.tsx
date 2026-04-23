@@ -36,7 +36,7 @@ export default function LoginPage() {
           </div>
           <h1 className="headline-sharp text-5xl md:text-6xl font-black text-primary leading-tight tracking-tighter">
             Access the <br />
-            <span className="italic font-serif text-accent">Intelligence Core.</span>
+            <span className="text-accent">Intelligence Core.</span>
           </h1>
           <p className="text-lg text-muted-foreground font-medium max-w-md mx-auto lg:mx-0 leading-relaxed">
             欢迎回到 Odin Pulse。请验证您的身份以访问实时行情数据、深度研报与量化交易信号。

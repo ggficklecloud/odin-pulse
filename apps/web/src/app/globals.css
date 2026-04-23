@@ -96,7 +96,7 @@
 
 /* 锐利的排版 */
 .headline-sharp {
-  font-family: var(--font-heading), sans-serif;
+  font-family: var(--font-sans), sans-serif;
   @apply tracking-tighter leading-tight;
 }
 

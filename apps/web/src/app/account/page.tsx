@@ -34,7 +34,7 @@ export default function AccountPage() {
              <span className="text-[10px] font-black uppercase tracking-widest text-primary">Identity Hub</span>
           </div>
           <h1 className="headline-sharp text-4xl md:text-6xl font-black text-primary tracking-tighter mb-8">
-            Manage your <span className="italic font-serif text-accent">Security.</span>
+            Manage your <span className="text-accent">Security.</span>
           </h1>
           <p className="text-lg text-muted-foreground font-medium max-w-2xl leading-relaxed">
             Configure your professional profile and security parameters. 

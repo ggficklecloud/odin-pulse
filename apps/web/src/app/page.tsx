@@ -227,9 +227,8 @@ export default async function HomePage() {
               </div>
               <h2 className="headline-sharp text-4xl md:text-5xl font-black text-primary mb-8 tracking-tighter">
                 工业级数据同步与 <br />
-                <span className="italic font-serif text-accent">实时索引系统</span>
-              </h2>
-              <div className="space-y-8">
+                <span className="text-accent">实时索引系统</span>
+                </h2>              <div className="space-y-8">
                 <InfraItem 
                   icon={<Database className="h-5 w-5" />}
                   title="多源统一存储"

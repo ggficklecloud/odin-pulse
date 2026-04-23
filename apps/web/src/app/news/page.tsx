@@ -113,7 +113,7 @@ function NewsPageContent() {
              <span className="text-[10px] font-black uppercase tracking-widest text-primary">Intelligence Flow</span>
           </div>
           <h1 className="headline-sharp text-4xl md:text-5xl font-black text-primary tracking-tighter">
-            新闻聚合 <span className="italic font-serif text-accent">Center.</span>
+            新闻聚合 <span className="text-accent">Center.</span>
           </h1>
         </div>
         <div className="flex items-center gap-3">
