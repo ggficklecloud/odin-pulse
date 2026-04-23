@@ -158,7 +158,8 @@ export default function ShortLinksPage() {
                       </div>
                     )}
 
-                    <Button 
+                    <Button
+                      type="submit"
                       disabled={creating}
                       className="w-full h-11 rounded-xl font-black uppercase tracking-widest text-[10px] shadow-lg shadow-primary/10"
                     >
