@@ -41,7 +41,7 @@ export class MarketService {
   }
 
   async getQuotes(symbols: string[]): Promise<MarketQuote[]> {
-    const redis = getRedisClient();
+    const redis = await getRedisClient();
     const results: MarketQuote[] = [];
 
     for (const sym of symbols) {
@@ -71,7 +71,9 @@ export class MarketService {
           assetType: "stock",
         };
 
-        await redis.setex(cacheKey, CACHE_TTL, JSON.stringify(fullQuote));
+        await redis.set(cacheKey, JSON.stringify(fullQuote), {
+          EX: CACHE_TTL
+        });
         results.push(fullQuote);
       } catch (err) {
         console.error(`Failed to fetch quote for ${sym}:`, err);
