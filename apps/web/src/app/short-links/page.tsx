@@ -79,7 +79,7 @@ export default function ShortLinksPage() {
   }
 
   function handleCopy(slug: string, id: string) {
-    const shortUrl = `${window.location.origin}/s/${slug}`;
+    const shortUrl = `${process.env.NEXT_PUBLIC_SHORT_LINK_DOMAIN || window.location.origin + "/s"}/${slug}`;
     navigator.clipboard.writeText(shortUrl);
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 2000);
