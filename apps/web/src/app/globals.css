@@ -5,78 +5,57 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* 🔵 Original Odin Pulse Colors - Preserved and Mapped */
-  --primary: #0f172a;      /* Navy */
-  --secondary: #1e3a8a;    /* Premium Blue */
-  --accent: #ca8a04;       /* Gold */
-  --accent-soft: rgba(202, 138, 4, 0.14);
+  /* 💠 精英极简配色系统 */
+  --background: #ffffff;
+  --foreground: #09090b; /* Zinc 950 */
   
-  --surface: rgba(255, 255, 255, 0.86);
-  --surface-strong: #ffffff;
-  --surface-muted: rgba(241, 245, 249, 0.92);
-  --border: rgba(15, 23, 42, 0.1);
-  --shadow: 0 24px 60px rgba(15, 23, 42, 0.12);
-
-  /* ⚪ Shadcn UI Tokens - Mapping to Odin Theme */
-  --background: #f8fafc;
-  --foreground: #020617;
+  --primary: #0f172a;    /* Navy */
+  --primary-foreground: #f8fafc;
   
-  --card: #ffffff;
-  --card-foreground: #020617;
+  --secondary: #f4f4f5;  /* Zinc 100 */
+  --secondary-foreground: #18181b;
   
-  --popover: #ffffff;
-  --popover-foreground: #020617;
-  
-  --primary-foreground: #ffffff;
-  --secondary-foreground: #ffffff;
-  
-  --muted: #f1f5f9;
-  --muted-foreground: #64748b;
-  
+  --accent: #ca8a04;     /* Gold 精准点缀 */
   --accent-foreground: #ffffff;
   
-  --destructive: #ef4444;
-  --destructive-foreground: #ffffff;
+  --muted: #f4f4f5;
+  --muted-foreground: #71717a; /* Zinc 500 */
   
-  --input: #e2e8f0;
+  --card: #ffffff;
+  --card-foreground: #09090b;
+  
+  --popover: #ffffff;
+  --popover-foreground: #09090b;
+  
+  --border: #e4e4e7; /* Zinc 200 */
+  --input: #e4e4e7;
   --ring: #0f172a;
   
-  --radius: 0.75rem;
+  --radius: 0.6rem;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-surface: var(--surface);
-  --color-surface-strong: var(--surface-strong);
-  --color-surface-muted: var(--surface-muted);
-  --color-border: var(--border);
   --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
   --color-accent: var(--accent);
-  --color-accent-soft: var(--accent-soft);
-  --color-success-soft: var(--success-soft);
-  
-  /* shadcn mappings */
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
   
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
 }
 
 @layer base {
@@ -85,12 +64,8 @@
   }
   body {
     @apply bg-background text-foreground;
-    background:
-      radial-gradient(circle at top left, rgba(30, 58, 138, 0.18), transparent 28%),
-      radial-gradient(circle at top right, rgba(202, 138, 4, 0.16), transparent 24%),
-      radial-gradient(circle at 50% 30%, rgba(15, 23, 42, 0.05), transparent 30%),
-      linear-gradient(180deg, #eef4ff 0%, #f8fafc 42%, #f7f9fc 100%);
-    min-height: 100vh;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    -webkit-font-smoothing: antialiased;
   }
   html {
     @apply font-sans;
@@ -98,58 +73,33 @@
   }
 }
 
-/* 💠 Custom Utility Classes (Legacy Compatibility) */
-.shell {
-  width: min(1200px, calc(100vw - 2rem));
+/* 💠 全新的工具类：轻量且锐利 */
+
+.container-slim {
+  width: min(1100px, calc(100vw - 3rem));
   margin: 0 auto;
 }
 
-.panel {
-  @apply bg-surface border-border shadow-2xl backdrop-blur-md;
+/* 极简玻璃拟态 */
+.glass-slim {
+  @apply bg-background/70 backdrop-blur-md border-border/40;
 }
 
-.panel-strong {
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.94));
-  border: 1px solid rgba(15, 23, 42, 0.12);
-  box-shadow:
-    0 18px 50px rgba(15, 23, 42, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.7);
+/* Bento 网格卡片 */
+.bento-card {
+  @apply bg-white border border-border shadow-[0_1px_3px_rgba(0,0,0,0.05)] transition-all duration-300;
 }
 
-.headline {
+.bento-card:hover {
+  @apply shadow-[0_8px_30px_rgba(0,0,0,0.04)] border-primary/10 -translate-y-0.5;
+}
+
+/* 锐利的排版 */
+.headline-sharp {
   font-family: var(--font-heading), sans-serif;
-  letter-spacing: -0.03em;
+  @apply tracking-tighter leading-tight;
 }
 
-.eyebrow {
-  @apply text-secondary text-xs font-bold uppercase tracking-widest;
-}
-
-.hero-orb {
-  position: absolute;
-  border-radius: 999px;
-  filter: blur(24px);
-  opacity: 0.55;
-  pointer-events: none;
-}
-
-.hero-orb-left {
-  top: -4rem;
-  left: -2rem;
-  width: 12rem;
-  height: 12rem;
-  background: rgba(30, 58, 138, 0.16);
-}
-
-.hero-orb-right {
-  right: 10%;
-  bottom: -2rem;
-  width: 10rem;
-  height: 10rem;
-  background: rgba(202, 138, 4, 0.18);
-}
-
-.fade-divider {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(15, 23, 42, 0.1), transparent);
+.mono-tag {
+  @apply font-mono text-[10px] font-bold uppercase tracking-[0.2em] py-0.5 px-2 rounded bg-secondary text-muted-foreground;
 }
