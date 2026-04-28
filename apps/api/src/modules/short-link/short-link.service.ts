@@ -2,6 +2,7 @@ import { nanoid } from "nanoid";
 import { ShortLink, CreateShortLinkRequest } from "@odin-pulse/shared";
 import { shortLinkRepository } from "./short-link.repository.js";
 import { snowflake } from "../../lib/snowflake.js";
+import { ConflictError } from "../../lib/errors.js";
 
 export class ShortLinkService {
   async create(userId: string, data: CreateShortLinkRequest): Promise<ShortLink> {
@@ -10,7 +11,7 @@ export class ShortLinkService {
     if (slug) {
       const existing = await shortLinkRepository.findBySlug(slug);
       if (existing) {
-        throw new Error("Slug already exists");
+        throw new ConflictError("该 Slug 已被占用，请尝试其他名称");
       }
     } else {
       // Generate a random slug if not provided

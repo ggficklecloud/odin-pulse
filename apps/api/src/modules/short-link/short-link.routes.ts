@@ -24,14 +24,7 @@ export async function registerShortLinkRoutes(app: FastifyInstance) {
   app.post("/api/v1/short-links", async (request) => {
     const session = await requireSession(request);
     const body = createShortLinkSchema.parse(request.body);
-    try {
-      return await shortLinkService.create(session.userId, body);
-    } catch (err: any) {
-      if (err.message === "Slug already exists") {
-        throw app.httpErrors.conflict("该 Slug 已被占用，请尝试其他名称");
-      }
-      throw err;
-    }
+    return shortLinkService.create(session.userId, body);
   });
 
   // List short links
