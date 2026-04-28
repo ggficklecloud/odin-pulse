@@ -21,6 +21,20 @@ function getApiBaseUrl() {
   return "";
 }
 
+async function handleResponse<T>(response: Response): Promise<T> {
+  if (!response.ok) {
+    let message = `Request failed: ${response.status}`;
+    try {
+      const body = await response.json();
+      message = body.message || message;
+    } catch (e) {
+      // Ignore parse error
+    }
+    throw new Error(message);
+  }
+  return (await response.json()) as T;
+}
+
 async function fetchJson<T>(path: string): Promise<T> {
   const response = await fetch(`${getApiBaseUrl()}${path}`, {
     cache: "no-store",
@@ -28,12 +42,7 @@ async function fetchJson<T>(path: string): Promise<T> {
       "Content-Type": "application/json",
     },
   });
-
-  if (!response.ok) {
-    throw new Error(`Request failed: ${response.status}`);
-  }
-
-  return (await response.json()) as T;
+  return handleResponse<T>(response);
 }
 
 export async function fetchNews(query: NewsQuery): Promise<NewsListResponse> {
@@ -73,24 +82,14 @@ export async function createShortLink(data: CreateShortLinkRequest): Promise<Sho
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
-
-  if (!response.ok) {
-    throw new Error(`Request failed: ${response.status}`);
-  }
-
-  return (await response.json()) as ShortLink;
+  return handleResponse<ShortLink>(response);
 }
 
 export async function deleteShortLink(id: string): Promise<{ success: boolean }> {
   const response = await fetch(`${getApiBaseUrl()}/api/v1/short-links/${id}`, {
     method: "DELETE",
   });
-
-  if (!response.ok) {
-    throw new Error(`Request failed: ${response.status}`);
-  }
-
-  return (await response.json()) as { success: boolean };
+  return handleResponse<{ success: boolean }>(response);
 }
 
 export async function fetchMarketQuotes(symbols?: string[]): Promise<MarketListResponse> {
